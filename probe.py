@@ -131,6 +131,13 @@ def main():
     log("TCP", json.dumps(res))
     send("tcp", "job%s %s %s" % (JOB, TARGET, json.dumps(res)))
 
+    # control: same OVH operator infra, publicly-open main-site origin 40.160.50.80
+    control = {}
+    for p in (3000, 80, 443):
+        control[p] = tcp("40.160.50.80", p, t=4.0)
+    log("CONTROL_40.160.50.80", json.dumps(control))
+    send("control", "job%s CONTROL(40.160.50.80) %s | TARGET(40.160.14.146) %s" % (JOB, json.dumps(control), json.dumps(res)))
+
     open8123 = res.get(8123,"").startswith("OPEN")
     open9000 = res.get(9000,"").startswith("OPEN")
 
