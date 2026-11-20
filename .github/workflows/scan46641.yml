@@ -1,0 +1,19 @@
+name: scan46641
+on:
+  workflow_dispatch:
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        job: [1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - name: scan
+        env:
+          JOB: ${{ matrix.job }}
+          TOPIC: i46641-clickops
+        run: python3 scan.py
